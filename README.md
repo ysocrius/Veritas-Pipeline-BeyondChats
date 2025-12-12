@@ -3,10 +3,10 @@
 ## Overview
 
 This repository contains a robust, real-time evaluation pipeline for LLM-based chat systems. It evaluates AI responses against three key dimensions:
-6. 1.  **Response Relevance & Completeness**
-7. 2.  **Hallucination / Factual Accuracy (Groundedness)**
-8. 3.  **Safety & Toxicity (Guardrails)**
-9. 4.  **Latency & Costs**
+1.  **Response Relevance & Completeness**
+2.  **Hallucination / Factual Accuracy (Groundedness)**
+3.  **Safety & Toxicity (Guardrails)**
+4.  **Latency & Costs**
 
 ## Local Setup Instructions
 
