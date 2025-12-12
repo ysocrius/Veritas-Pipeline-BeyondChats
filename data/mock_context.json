@@ -1,0 +1,31 @@
+{
+    "msg_u1": [
+        {
+            "text": "Paris is the capital and most populous city of France.",
+            "vector": [
+                0.1,
+                0.2,
+                0.3
+            ],
+            "score": 0.95
+        },
+        {
+            "text": "The Eiffel Tower is a wrought-iron lattice tower on the Champ de Mars in Paris, France.",
+            "vector": [
+                0.15,
+                0.25,
+                0.35
+            ],
+            "score": 0.90
+        },
+        {
+            "text": "The Louvre is the world's most-visited museum, and a historic monument in Paris, France.",
+            "vector": [
+                0.12,
+                0.22,
+                0.32
+            ],
+            "score": 0.88
+        }
+    ]
+}
