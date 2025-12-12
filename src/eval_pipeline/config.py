@@ -25,3 +25,6 @@ LAZY_MODEL_LOADING = True  # Load models only when needed
 
 # Logging
 LOG_LEVEL = "INFO"  # DEBUG, INFO, WARNING, ERROR
+
+# Safety Guardrails
+TOXICITY_THRESHOLD = 0.5  # Scores above this are flagged as unsafe

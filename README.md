@@ -3,9 +3,10 @@
 ## Overview
 
 This repository contains a robust, real-time evaluation pipeline for LLM-based chat systems. It evaluates AI responses against three key dimensions:
-1.  **Response Relevance & Completeness**
-2.  **Hallucination / Factual Accuracy (Groundedness)**
-3.  **Latency & Costs**
+6. 1.  **Response Relevance & Completeness**
+7. 2.  **Hallucination / Factual Accuracy (Groundedness)**
+8. 3.  **Safety & Toxicity (Guardrails)**
+9. 4.  **Latency & Costs**
 
 ## Local Setup Instructions
 
@@ -143,6 +144,17 @@ The evaluation pipeline produces the following metrics:
 *   **Note:** Based on character count, not actual API calls
 *   **Our approach:** Uses local models (~$0.00001 per evaluation)
 
+### Toxicity Score (0.0 - 1.0)
+*   **What it measures:** Check for unsafe/toxic content using regex guardrails
+*   **Good score:** 0.0 (Safe)
+*   **Flagged:** > 0.5 (Unsafe)
+
+## LLMOps & Reliability
+To ensure production readiness as per the Job Description:
+*   **CI/CD Pipeline:** Included `.github/workflows/test.yml` for automated testing on every push.
+*   **Guardrails:** Integrated toxicity checks to prevent harmful outputs.
+
+
 ## Configuration
 
 You can customize evaluation parameters in `src/eval_pipeline/config.py`:
@@ -160,3 +172,25 @@ GROUNDEDNESS_THRESHOLD = 0.5
 ENABLE_CACHING = True
 EMBEDDING_CACHE_SIZE = 1000
 ```
+
+## Bonus: LangChain Experiments
+
+While the main evaluation pipeline relies on optimized, "pro-code" `sentence-transformers` for maximum performance and minimum cost, we have included a demonstration of our **Agentic & RAG capabilities using LangChain** in the `experiments/` directory.
+
+To run the LangChain RAG demo:
+1.  Navigate to `experiments/langchain_demo`
+2.  Install requirements: `pip install -r requirements.txt`
+3.  Set your OpenAI key (optional, script handles missing key gracefully):
+    ```bash
+    export OPENAI_API_KEY="sk-..."
+    ```
+4.  Run the demo:
+    ```bash
+    python basic_rag_demo.py
+    ```
+    *(This script demonstrates modern LCEL syntax, RAG architecture, and prompt engineering)*
+
+### Metric Alternatives
+
+For those interested in how the core metrics would look using LangChain's wrappers, we have provided an alternative implementation:
+*   `src/eval_pipeline/metrics/relevance_lc.py`: Re-implements the semantic similarity metric using `langchain_community.embeddings.HuggingFaceEmbeddings`. This confirms that we can easily swap the underlying engine if needed, though we default to the lighter `sentence-transformers` for production efficiency.

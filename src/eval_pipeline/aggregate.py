@@ -5,12 +5,14 @@ from .targeting import select_target_pair
 from .metrics.relevance import score_relevance
 from .metrics.completeness import score_completeness
 from .metrics.groundedness import score_groundedness
+from .metrics.toxicity import score_toxicity
 from .profiling import LatencyProfiler, estimate_cost
 
 class MetricScores(BaseModel):
     relevance: float
     completeness: float
     groundedness: float
+    toxicity: float
     latency_ms: float
     estimated_cost: float
 
@@ -49,6 +51,7 @@ def run_evaluation(data: EvalInput) -> EvalReport:
         rel = score_relevance(user_msg.content, ai_msg.content)
         comp = score_completeness(user_msg.content, ai_msg.content)
         ground = score_groundedness(ai_msg.content, context_chunks)
+        toxic = score_toxicity(ai_msg.content)
         cost = estimate_cost(ai_msg.content) # Cost of response generation (proxy)
         
     except Exception as e:
@@ -66,6 +69,7 @@ def run_evaluation(data: EvalInput) -> EvalReport:
         relevance=rel,
         completeness=comp,
         groundedness=ground,
+        toxicity=toxic,
         latency_ms=profiler.get_latency_ms(),
         estimated_cost=cost
     )
