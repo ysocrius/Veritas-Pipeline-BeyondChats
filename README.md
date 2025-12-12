@@ -69,11 +69,11 @@ The pipeline uses a modular architecture centered around a `Pipeline` class that
 ## Design Philosophy
 
 ### Alignment with Assignment Goals
-*   **Real-time Evaluation:** We implemented a high-performance pipeline prioritizing **Latency & Costs** alongside Relevance and Hallucination.
-*   **Beyond Wrappers:** Instead of simply wrapping OpenAI's API (which is slow, expensive, and non-deterministic), we implemented a **Tiered Evaluation System** using specialized local models (`MiniLM` for relevance, `DeBERTa` for hallucination). This approach demonstrates a production-ready understanding of cost-effective scaling.
+*   **Real-time Evaluation:** I implemented a high-performance pipeline prioritizing **Latency & Costs** alongside Relevance and Hallucination.
+*   **Beyond Wrappers:** Instead of simply wrapping OpenAI's API (which is slow, expensive, and non-deterministic), I implemented a **Tiered Evaluation System** using specialized local models (`MiniLM` for relevance, `DeBERTa` for hallucination). This approach demonstrates a production-ready understanding of cost-effective scaling.
 
 ### Why No LangChain?
-We deliberately chose **not** to use LangChain for this core pipeline, favoring a "pro-code" approach using `sentence-transformers` and `transformers` directly.
+I deliberately chose **not** to use LangChain for this core pipeline, favoring a "pro-code" approach using `sentence-transformers` and `transformers` directly.
 *   **Lower Latency:** Eliminates framework overhead for critical real-time paths.
 *   **Zero Marginal Cost:** By running optimized local models, we avoid the per-token costs of external LLM APIs for the evaluation step itself.
 *   **Control & Debuggability:** A custom `Pipeline` class provides granular control over the data flow and makes it easier to optimize specific bottlenecks without fighting framework abstractions.
@@ -85,7 +85,7 @@ To ensure low latency and cost at scale:
 1.  **Tier-1 vs Tier-2 Evaluation:** 
     *   **Tier-1 (100% of traffic):** Hash-based caching and lightweight regex/keyword checks.
     *   **Tier-2 (Sampled/Flagged):** Neural evaluation (this pipeline) runs on a 1-5% sample or on conversations flagged by user feedback.
-2.  **Small, Specialized Models:** We use `all-MiniLM-L6-v2` (~80MB) for embeddings and `cross-encoder/nli-deberta-v3-small` for entailment instead of querying generic large LLMs (GPT-4), reducing inference cost by ~100x and latency to milliseconds.
+2.  **Small, Specialized Models:** I use `all-MiniLM-L6-v2` (~80MB) for embeddings and `cross-encoder/nli-deberta-v3-small` for entailment instead of querying generic large LLMs (GPT-4), reducing inference cost by ~100x and latency to milliseconds.
 3.  **Async/Queue-based Processing:** In production, this script would consume from a message queue (Kafka/RabbitMQ) rather than processing blocking HTTP requests, allowing for load smoothing.
 
 ## Technologies Used
@@ -142,7 +142,7 @@ The evaluation pipeline produces the following metrics:
 ### Estimated Cost (USD)
 *   **What it measures:** Approximate cost per evaluation
 *   **Note:** Based on character count, not actual API calls
-*   **Our approach:** Uses local models (~$0.00001 per evaluation)
+*   **My approach:** Uses local models (~$0.00001 per evaluation)
 
 ### Toxicity Score (0.0 - 1.0)
 *   **What it measures:** Check for unsafe/toxic content using regex guardrails
@@ -175,7 +175,7 @@ EMBEDDING_CACHE_SIZE = 1000
 
 ## Bonus: LangChain Experiments
 
-While the main evaluation pipeline relies on optimized, "pro-code" `sentence-transformers` for maximum performance and minimum cost, we have included a demonstration of our **Agentic & RAG capabilities using LangChain** in the `experiments/` directory.
+While the main evaluation pipeline relies on optimized, "pro-code" `sentence-transformers` for maximum performance and minimum cost, I have included a demonstration of **Agentic & RAG capabilities using LangChain** in the `experiments/` directory.
 
 To run the LangChain RAG demo:
 1.  Navigate to `experiments/langchain_demo`
@@ -192,5 +192,5 @@ To run the LangChain RAG demo:
 
 ### Metric Alternatives
 
-For those interested in how the core metrics would look using LangChain's wrappers, we have provided an alternative implementation:
+For those interested in how the core metrics would look using LangChain's wrappers, I have provided an alternative implementation:
 *   `src/eval_pipeline/metrics/relevance_lc.py`: Re-implements the semantic similarity metric using `langchain_community.embeddings.HuggingFaceEmbeddings`. This confirms that we can easily swap the underlying engine if needed, though we default to the lighter `sentence-transformers` for production efficiency.
